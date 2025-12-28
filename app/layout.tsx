@@ -1,0 +1,29 @@
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+
+const inter = Inter({ subsets: ['latin'] });
+
+export const metadata: Metadata = {
+  title: 'Whiskey.ai - Your Friendly Pug Assistant',
+  description: 'Chat with Whiskey, the adorably confused pug who tries to help with your questions!',
+  keywords: ['AI', 'chatbot', 'pug', 'assistant', 'chat', 'fun'],
+  authors: [{ name: 'Whiskey the Pug' }],
+  openGraph: {
+    title: 'Whiskey.ai',
+    description: 'Your friendly (and slightly confused) pug assistant',
+    type: 'website',
+  },
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className}>{children}</body>
+    </html>
+  );
+}
