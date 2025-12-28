@@ -5,13 +5,19 @@ import { useConversations } from '@/hooks/useConversations';
 import ChatHeader from './ChatHeader';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Sidebar from '@/components/sidebar/Sidebar';
 
 export default function ChatContainer() {
-  const { messages, sendMessage, isTyping } = useChat();
+  const { messages, sendMessage, isTyping, currentConversationId } = useChat();
   const { startNewConversation } = useConversations();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [chatKey, setChatKey] = useState(0);
+
+  // Update chatKey when conversation ID changes to ensure clean remount
+  useEffect(() => {
+    setChatKey(prev => prev + 1);
+  }, [currentConversationId]);
 
   const handleNewChat = () => {
     startNewConversation();
@@ -30,7 +36,12 @@ export default function ChatContainer() {
           onNewChat={handleNewChat}
         />
 
-        <MessageList messages={messages} isTyping={isTyping} />
+        <MessageList
+          key={currentConversationId || `new-${chatKey}`}
+          messages={messages}
+          isTyping={isTyping}
+          onPromptClick={sendMessage}
+        />
 
         <MessageInput onSend={sendMessage} disabled={isTyping} />
       </div>
