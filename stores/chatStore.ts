@@ -6,6 +6,7 @@ interface ChatState {
   currentConversation: Conversation | null;
   messages: Message[];
   isTyping: boolean;
+  conversationChangeCounter: number;
 
   // Actions
   setCurrentConversation: (conversation: Conversation | null) => void;
@@ -14,12 +15,14 @@ interface ChatState {
   setTyping: (isTyping: boolean) => void;
   clearMessages: () => void;
   createNewConversation: () => void;
+  triggerConversationRefresh: () => void;
 }
 
 export const useChatStore = create<ChatState>((set) => ({
   currentConversation: null,
   messages: [],
   isTyping: false,
+  conversationChangeCounter: 0,
 
   setCurrentConversation: (conversation) =>
     set({
@@ -58,4 +61,9 @@ export const useChatStore = create<ChatState>((set) => ({
       messages: [],
       isTyping: false,
     }),
+
+  triggerConversationRefresh: () =>
+    set((state) => ({
+      conversationChangeCounter: state.conversationChangeCounter + 1,
+    })),
 }));

@@ -17,6 +17,7 @@ export function useChat() {
     addMessage,
     setTyping,
     setCurrentConversation,
+    triggerConversationRefresh,
   } = useChatStore();
 
   const sendMessage = useCallback(
@@ -53,6 +54,7 @@ export function useChat() {
 
       // Save conversation to localStorage
       ConversationStorage.saveConversation(conversation);
+      triggerConversationRefresh(); // Notify sidebar to refresh
 
       // Set typing indicator
       setTyping(true);
@@ -102,6 +104,7 @@ export function useChat() {
 
         // Save updated conversation
         ConversationStorage.saveConversation(conversation);
+        triggerConversationRefresh(); // Notify sidebar to refresh
       } catch (error) {
         console.error('Error generating response:', error);
 
@@ -121,7 +124,7 @@ export function useChat() {
         setTyping(false);
       }
     },
-    [currentConversation, messages, isTyping, addMessage, setTyping, setCurrentConversation]
+    [currentConversation, messages, isTyping, addMessage, setTyping, setCurrentConversation, triggerConversationRefresh]
   );
 
   return {

@@ -7,7 +7,7 @@ import { useChatStore } from '@/stores/chatStore';
 
 export function useConversations() {
   const [conversations, setConversations] = useState<Conversation[]>([]);
-  const { setCurrentConversation, createNewConversation } = useChatStore();
+  const { setCurrentConversation, createNewConversation, conversationChangeCounter } = useChatStore();
 
   // Load conversations from localStorage
   const loadConversations = useCallback(() => {
@@ -15,10 +15,10 @@ export function useConversations() {
     setConversations(loaded);
   }, []);
 
-  // Load conversations on mount
+  // Load conversations on mount and when counter changes
   useEffect(() => {
     loadConversations();
-  }, [loadConversations]);
+  }, [loadConversations, conversationChangeCounter]);
 
   // Select a conversation
   const selectConversation = useCallback(
