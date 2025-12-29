@@ -28,6 +28,49 @@ export default function MessageInput({ onSend, disabled = false }: MessageInputP
 
   return (
     <div className="border-t border-light-border dark:border-dark-border bg-light-surface dark:bg-dark-surface p-4">
+      <style jsx>{`
+        textarea.chat-input::-webkit-scrollbar {
+          width: 14px;
+        }
+        textarea.chat-input::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        textarea.chat-input::-webkit-scrollbar-thumb {
+          background: transparent;
+        }
+        textarea.chat-input::-webkit-scrollbar-button {
+          display: none;
+        }
+        /* Only show scrollbar when content overflows - Pug themed colors */
+        textarea.chat-input[data-scrollable="true"]::-webkit-scrollbar-track {
+          background: #F5E6D3 !important; /* pug-cream */
+          border-radius: 7px;
+          margin: 2px;
+        }
+        :global(.dark) textarea.chat-input[data-scrollable="true"]::-webkit-scrollbar-track {
+          background: rgba(160, 137, 104, 0.15) !important; /* pug-brown-medium with opacity */
+        }
+        textarea.chat-input[data-scrollable="true"]::-webkit-scrollbar-thumb {
+          background: #A08968 !important; /* pug-brown-medium */
+          border-radius: 7px;
+          border: 2px solid transparent;
+          background-clip: padding-box;
+          transition: background 150ms ease;
+        }
+        :global(.dark) textarea.chat-input[data-scrollable="true"]::-webkit-scrollbar-thumb {
+          background: #D4A574 !important; /* pug-fawn-light */
+          border: 2px solid transparent;
+          background-clip: padding-box;
+        }
+        textarea.chat-input[data-scrollable="true"]::-webkit-scrollbar-thumb:hover {
+          background: #C77A4E !important; /* pug-fawn */
+          background-clip: padding-box;
+        }
+        :global(.dark) textarea.chat-input[data-scrollable="true"]::-webkit-scrollbar-thumb:hover {
+          background: #C77A4E !important; /* pug-fawn */
+          background-clip: padding-box;
+        }
+      `}</style>
       <div className="max-w-4xl mx-auto flex gap-3 items-end">
         <textarea
           value={input}
@@ -36,7 +79,7 @@ export default function MessageInput({ onSend, disabled = false }: MessageInputP
           placeholder="Ask Whiskey anything... (or just say hi! 🐕)"
           disabled={disabled}
           rows={1}
-          className="flex-1 resize-none rounded-xl px-4 py-3 bg-light-background dark:bg-dark-background border border-light-border dark:border-dark-border text-light-text dark:text-dark-text placeholder:text-light-text-secondary dark:placeholder:text-dark-text-secondary focus:outline-none focus:ring-2 focus:ring-pug-fawn dark:focus:ring-pug-fawn-light disabled:opacity-50 disabled:cursor-not-allowed max-h-32 overflow-y-auto"
+          className="chat-input flex-1 resize-none rounded-xl px-4 py-3 bg-light-background dark:bg-dark-background border border-light-border dark:border-dark-border text-light-text dark:text-dark-text placeholder:text-light-text-secondary dark:placeholder:text-dark-text-secondary focus:outline-none focus:ring-2 focus:ring-pug-fawn dark:focus:ring-pug-fawn-light disabled:opacity-50 disabled:cursor-not-allowed max-h-30 overflow-y-auto"
           style={{
             minHeight: '48px',
             height: 'auto',
@@ -44,7 +87,15 @@ export default function MessageInput({ onSend, disabled = false }: MessageInputP
           onInput={(e) => {
             const target = e.target as HTMLTextAreaElement;
             target.style.height = 'auto';
-            target.style.height = target.scrollHeight + 'px';
+            // Cap height at 120px (max-h-30)
+            const newHeight = Math.min(target.scrollHeight, 120);
+            target.style.height = newHeight + 'px';
+            // Show scrollbar only when content overflows
+            if (target.scrollHeight > 120) {
+              target.setAttribute('data-scrollable', 'true');
+            } else {
+              target.removeAttribute('data-scrollable');
+            }
           }}
         />
 
