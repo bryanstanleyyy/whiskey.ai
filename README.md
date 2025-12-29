@@ -2,6 +2,8 @@
 
 Your friendly (and adorably confused) pug assistant!
 
+**🌐 Live Demo**: [https://whiskey-ai.vercel.app/](https://whiskey-ai.vercel.app/)
+
 ## About
 
 Whiskey.ai is a fun, ChatGPT-style chat interface featuring Whiskey, a pug who tries their best to help with your questions... while getting distracted by treats, naps, and squirrels! This is a **mock AI** website - there's no real AI here, just an adorable pug with lots of personality!
