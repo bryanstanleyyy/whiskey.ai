@@ -77,8 +77,8 @@ export default function MessageList({ messages, isTyping, onPromptClick }: Messa
           background-clip: padding-box;
         }
       `}</style>
-      <div ref={scrollContainerRef} className="message-list flex-1 overflow-y-auto bg-light-background dark:bg-dark-background" style={{ scrollbarGutter: 'stable' }}>
-      <div className="max-w-4xl mx-auto px-3 pr-4 xs:pl-4 xs:pr-6 py-4 xs:py-6">
+      <div ref={scrollContainerRef} className="message-list flex-1 overflow-y-auto bg-light-background dark:bg-dark-background">
+      <div className="max-w-4xl mx-auto px-3 xs:px-4 py-4 xs:py-6">
         {/* Welcome message when no messages */}
         {messages.length === 0 && (
           <div className="flex flex-col items-center justify-center h-full text-center py-8 xs:py-12">
