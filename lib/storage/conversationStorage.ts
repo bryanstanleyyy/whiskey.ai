@@ -38,7 +38,20 @@ export class ConversationStorage {
       // Save to localStorage
       localStorage.setItem(STORAGE_KEY, JSON.stringify(trimmed));
     } catch (error) {
-      console.error('Error saving conversation:', error);
+      // Handle quota exceeded error
+      if (error instanceof DOMException && error.name === 'QuotaExceededError') {
+        // Try to free up space by keeping only 30 most recent conversations
+        try {
+          const allConvos = this.getAllConversations();
+          const reduced = allConvos.slice(0, 30);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(reduced));
+          console.log('Storage quota exceeded - reduced to 30 conversations');
+        } catch (retryError) {
+          console.error('Failed to save even after cleanup:', retryError);
+        }
+      } else {
+        console.error('Error saving conversation:', error);
+      }
     }
   }
 

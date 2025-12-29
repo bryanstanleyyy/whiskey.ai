@@ -7,6 +7,7 @@ import MessageList from './MessageList';
 import MessageInput from './MessageInput';
 import { useState, useEffect } from 'react';
 import Sidebar from '@/components/sidebar/Sidebar';
+import { StorageWarningBanner } from '@/components/ui/StorageWarningBanner';
 
 export default function ChatContainer() {
   const { messages, sendMessage, isTyping, currentConversationId } = useChat();
@@ -35,6 +36,8 @@ export default function ChatContainer() {
           onMenuClick={() => setSidebarOpen(!sidebarOpen)}
           onNewChat={handleNewChat}
         />
+
+        <StorageWarningBanner />
 
         <MessageList
           key={currentConversationId || `new-${chatKey}`}
