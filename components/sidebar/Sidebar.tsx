@@ -31,7 +31,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       `}
     >
       {/* Header */}
-      <div className="p-4 border-b border-light-border dark:border-dark-border">
+      <div className="py-5 px-4 border-b border-light-border dark:border-dark-border">
         <h2 className="text-lg font-semibold text-light-text dark:text-dark-text flex items-center gap-2">
           <MessageSquare size={20} />
           Chat History
@@ -103,7 +103,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       {/* Footer */}
       <div className="p-4 border-t border-light-border dark:border-dark-border">
         <div className="text-xs text-light-text-secondary dark:text-dark-text-secondary text-center">
-          Made with 🐶 by Whiskey
+          Made with ❤️ by Whiskey 🐶<br />
+          (and Bryan)
         </div>
       </div>
     </aside>
