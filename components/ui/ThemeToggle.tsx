@@ -1,11 +1,24 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { Sun, Moon } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTheme } from '@/hooks/useTheme';
 
 export default function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Prevent hydration mismatch by not rendering theme-dependent content until mounted
+  if (!mounted) {
+    return (
+      <div className="p-2 rounded-lg bg-light-background dark:bg-dark-background w-[36px] h-[36px]" />
+    );
+  }
 
   return (
     <motion.button

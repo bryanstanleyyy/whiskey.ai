@@ -5,8 +5,10 @@ import { X } from 'lucide-react';
 
 export function StorageWarningBanner() {
   const [isDismissed, setIsDismissed] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     // Check if user has seen the warning
     const hasSeenWarning = localStorage.getItem('whiskey_seen_storage_warning');
     setIsDismissed(hasSeenWarning === 'true');
@@ -17,9 +19,12 @@ export function StorageWarningBanner() {
     setIsDismissed(true);
   };
 
-  if (isDismissed) return null;
-
+  // Always render but hide with style to prevent hydration mismatch
   return (
+    <div
+      suppressHydrationWarning
+      style={{ display: !mounted || isDismissed ? 'none' : undefined }}
+    >
     <div className="bg-light-surface dark:bg-dark-surface border-l-4 border-pug-fawn p-2 xs:p-3 flex items-start gap-2 xs:gap-3">
       <div className="flex-1 text-xs xs:text-sm">
         <p className="font-medium text-light-text dark:text-dark-text">
@@ -43,6 +48,7 @@ export function StorageWarningBanner() {
       >
         <X size={16} className="xs:w-[18px] xs:h-[18px]" />
       </button>
+    </div>
     </div>
   );
 }
