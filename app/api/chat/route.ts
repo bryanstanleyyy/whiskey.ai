@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { generateWhiskeyResponse, checkRateLimit } from '@/lib/ai/geminiClient';
+import { generateWhiskeyResponse } from '@/lib/ai/groqClient';
 import { GeminiRequest } from '@/types/gemini';
 import { Message } from '@/types/chat';
 
@@ -25,24 +25,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check rate limiting (free tier protection)
-    const rateCheck = checkRateLimit();
-    if (!rateCheck.allowed) {
-      const resetSeconds = Math.ceil((rateCheck.resetIn || 0) / 1000);
-      return NextResponse.json(
-        {
-          error: 'Rate limit exceeded',
-          resetIn: rateCheck.resetIn,
-          fallbackResponse: {
-            content: `*panting heavily* Okay okay, too many questions! *overwhelmed* My pug brain needs a break! Can we slow down a bit? Maybe... *yawns* ...take a nap? Try again in ${resetSeconds} seconds! 😴`,
-            mood: 'sleeping',
-          },
-        },
-        { status: 429 }
-      );
-    }
-
-    // Format conversation history for Gemini
+    // Format conversation history for Groq (OpenAI format)
     const geminiHistory = conversationHistory.slice(-10).map(msg => ({
       role: msg.role,
       content: msg.content,
@@ -62,7 +45,7 @@ export async function POST(request: NextRequest) {
       },
     };
 
-    // Generate response from Gemini
+    // Generate response from Groq
     const response = await generateWhiskeyResponse(geminiRequest);
 
     return NextResponse.json({
@@ -75,7 +58,21 @@ export async function POST(request: NextRequest) {
 
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
 
-    // Check if it's a Gemini API error
+    // Check for rate limit error from Groq
+    if (errorMessage.includes('Rate limit exceeded')) {
+      return NextResponse.json(
+        {
+          error: 'Rate limit exceeded',
+          fallbackResponse: {
+            content: "*panting heavily* Okay okay, too many questions! *overwhelmed* My pug brain needs a break! Can we slow down a bit? Maybe... *yawns* ...take a nap? Try again in a minute! 😴",
+            mood: 'sleeping',
+          },
+        },
+        { status: 429 }
+      );
+    }
+
+    // Check if it's an API key error
     if (errorMessage.includes('API key') || errorMessage.includes('API_KEY')) {
       return NextResponse.json(
         {
