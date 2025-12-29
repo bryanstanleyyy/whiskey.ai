@@ -51,23 +51,14 @@ export default function MessageInput({ onSend, disabled = false }: MessageInputP
           background: rgba(160, 137, 104, 0.15) !important; /* pug-brown-medium with opacity */
         }
         textarea.chat-input[data-scrollable="true"]::-webkit-scrollbar-thumb {
-          background: #A08968 !important; /* pug-brown-medium */
+          background: #C77A4E !important; /* pug-fawn (orange) */
           border-radius: 7px;
           border: 2px solid transparent;
           background-clip: padding-box;
-          transition: background 150ms ease;
         }
         :global(.dark) textarea.chat-input[data-scrollable="true"]::-webkit-scrollbar-thumb {
           background: #D4A574 !important; /* pug-fawn-light */
           border: 2px solid transparent;
-          background-clip: padding-box;
-        }
-        textarea.chat-input[data-scrollable="true"]::-webkit-scrollbar-thumb:hover {
-          background: #C77A4E !important; /* pug-fawn */
-          background-clip: padding-box;
-        }
-        :global(.dark) textarea.chat-input[data-scrollable="true"]::-webkit-scrollbar-thumb:hover {
-          background: #C77A4E !important; /* pug-fawn */
           background-clip: padding-box;
         }
       `}</style>

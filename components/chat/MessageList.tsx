@@ -66,23 +66,14 @@ export default function MessageList({ messages, isTyping, onPromptClick }: Messa
           background: rgba(160, 137, 104, 0.15) !important; /* pug-brown-medium with opacity */
         }
         .message-list[data-scrollable="true"]::-webkit-scrollbar-thumb {
-          background: #A08968 !important; /* pug-brown-medium */
+          background: #C77A4E !important; /* pug-fawn (orange) */
           border-radius: 7px;
           border: 2px solid transparent;
           background-clip: padding-box;
-          transition: background 150ms ease;
         }
         :global(.dark) .message-list[data-scrollable="true"]::-webkit-scrollbar-thumb {
           background: #D4A574 !important; /* pug-fawn-light */
           border: 2px solid transparent;
-          background-clip: padding-box;
-        }
-        .message-list[data-scrollable="true"]::-webkit-scrollbar-thumb:hover {
-          background: #C77A4E !important; /* pug-fawn */
-          background-clip: padding-box;
-        }
-        :global(.dark) .message-list[data-scrollable="true"]::-webkit-scrollbar-thumb:hover {
-          background: #C77A4E !important; /* pug-fawn */
           background-clip: padding-box;
         }
       `}</style>

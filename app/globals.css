@@ -39,27 +39,16 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #A08968; /* pug-brown-medium */
+  background: #C77A4E; /* pug-fawn (orange) */
   border-radius: 7px;
   border: 2px solid transparent;
   background-clip: padding-box;
-  transition: background 150ms ease;
   cursor: default;
 }
 
 .dark ::-webkit-scrollbar-thumb {
   background: #D4A574; /* pug-fawn-light */
   border: 2px solid transparent;
-  background-clip: padding-box;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #C77A4E; /* pug-fawn */
-  background-clip: padding-box;
-}
-
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: #C77A4E; /* pug-fawn */
   background-clip: padding-box;
 }
 
