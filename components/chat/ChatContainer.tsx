@@ -8,6 +8,7 @@ import MessageInput from './MessageInput';
 import { useState, useEffect } from 'react';
 import Sidebar from '@/components/sidebar/Sidebar';
 import { StorageWarningBanner } from '@/components/ui/StorageWarningBanner';
+import { InstallPrompt } from '@/components/ui/InstallPrompt';
 
 export default function ChatContainer() {
   const { messages, sendMessage, isTyping, currentConversationId } = useChat();
@@ -19,6 +20,19 @@ export default function ChatContainer() {
   useEffect(() => {
     setChatKey(prev => prev + 1);
   }, [currentConversationId]);
+
+  // Prevent body scroll when sidebar is open on mobile
+  useEffect(() => {
+    if (sidebarOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [sidebarOpen]);
 
   const handleNewChat = () => {
     startNewConversation();
@@ -52,10 +66,14 @@ export default function ChatContainer() {
       {/* Overlay for mobile sidebar */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-30 lg:hidden"
+          className="fixed inset-0 bg-black/50 z-30 lg:hidden touch-none"
           onClick={() => setSidebarOpen(false)}
+          onTouchMove={(e) => e.preventDefault()}
         />
       )}
+
+      {/* PWA Install Prompt */}
+      <InstallPrompt />
     </div>
   );
 }

@@ -78,20 +78,25 @@ export default function MessageList({ messages, isTyping, onPromptClick }: Messa
         }
       `}</style>
       <div ref={scrollContainerRef} className="message-list flex-1 overflow-y-auto bg-light-background dark:bg-dark-background" style={{ scrollbarGutter: 'stable' }}>
-      <div className="max-w-4xl mx-auto pl-4 pr-6 py-6">
+      <div className="max-w-4xl mx-auto px-3 pr-4 xs:pl-4 xs:pr-6 py-4 xs:py-6">
         {/* Welcome message when no messages */}
         {messages.length === 0 && (
-          <div className="flex flex-col items-center justify-center h-full text-center py-12">
-            <div className="text-6xl mb-4">🐶</div>
-            <h2 className="text-2xl font-bold text-light-text dark:text-dark-text mb-2">
+          <div className="flex flex-col items-center justify-center h-full text-center py-8 xs:py-12">
+            <div className="text-5xl xs:text-6xl mb-3 xs:mb-4">🐶</div>
+            <h2 className="text-xl xs:text-2xl font-bold text-light-text dark:text-dark-text mb-2">
               Welcome to Whiskey.ai!
             </h2>
-            <p className="text-light-text-secondary dark:text-dark-text-secondary max-w-md">
-              Hi! I&apos;m Whiskey, your friendly (and slightly confused) pug assistant! Ask me anything,
-              and I&apos;ll do my very best to help... probably while getting distracted by treats! 🦴
+            <p className="text-sm xs:text-base text-light-text-secondary dark:text-dark-text-secondary max-w-md px-4">
+              <span className="hidden xs:inline">
+                Hi! I&apos;m Whiskey, your friendly (and slightly confused) pug assistant! Ask me anything,
+                and I&apos;ll do my very best to help... probably while getting distracted by treats! 🦴
+              </span>
+              <span className="xs:hidden">
+                Hi! I&apos;m Whiskey, your friendly pug assistant! Ask me anything! 🦴
+              </span>
             </p>
 
-            <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-2xl">
+            <div className="mt-6 xs:mt-8 grid grid-cols-1 xs:grid-cols-2 gap-2 xs:gap-3 w-full max-w-2xl px-4">
               <ExamplePrompt text="What is Python?" onClick={() => onPromptClick?.('What is Python?')} />
               <ExamplePrompt text="How do I center a div?" onClick={() => onPromptClick?.('How do I center a div?')} />
               <ExamplePrompt text="Tell me about treats" onClick={() => onPromptClick?.('Tell me about treats')} />
@@ -128,7 +133,7 @@ function ExamplePrompt({ text, onClick }: { text: string; onClick?: () => void }
   return (
     <div
       onClick={onClick}
-      className="px-4 py-2 rounded-lg bg-light-surface dark:bg-dark-surface border border-light-border dark:border-dark-border text-sm text-light-text-secondary dark:text-dark-text-secondary hover:border-pug-fawn dark:hover:border-pug-fawn-light cursor-pointer transition-colors"
+      className="px-3 py-2.5 xs:px-4 xs:py-2 rounded-lg bg-light-surface dark:bg-dark-surface border border-light-border dark:border-dark-border text-xs xs:text-sm text-light-text-secondary dark:text-dark-text-secondary hover:border-pug-fawn dark:hover:border-pug-fawn-light cursor-pointer transition-colors active:scale-[0.98]"
     >
       &quot;{text}&quot;
     </div>

@@ -26,14 +26,15 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         fixed lg:static inset-y-0 left-0 z-40
         transform ${isOpen ? 'translate-x-0' : '-translate-x-full'}
         lg:translate-x-0 transition-transform duration-300
-        w-64 bg-light-surface dark:bg-dark-surface border-r border-light-border dark:border-dark-border
+        w-64 xs:w-72 bg-light-surface dark:bg-dark-surface border-r border-light-border dark:border-dark-border
         flex flex-col
+        pt-safe-top pb-safe-bottom
       `}
     >
       {/* Header */}
-      <div className="py-5 px-4 border-b border-light-border dark:border-dark-border">
-        <h2 className="text-lg font-semibold text-light-text dark:text-dark-text flex items-center gap-2">
-          <MessageSquare size={20} />
+      <div className="py-4 xs:py-5 px-3 xs:px-4 border-b border-light-border dark:border-dark-border">
+        <h2 className="text-base xs:text-lg font-semibold text-light-text dark:text-dark-text flex items-center gap-2">
+          <MessageSquare size={18} className="xs:w-5 xs:h-5" />
           Chat History
         </h2>
       </div>
@@ -101,7 +102,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       </div>
 
       {/* Footer */}
-      <div className="p-4 border-t border-light-border dark:border-dark-border">
+      <div className="p-3 xs:p-4 border-t border-light-border dark:border-dark-border">
         <div className="text-xs text-light-text-secondary dark:text-dark-text-secondary text-center">
           Made with ❤️ by Whiskey 🐶<br />
           (and Bryan)

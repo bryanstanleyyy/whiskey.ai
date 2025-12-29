@@ -27,7 +27,7 @@ export default function MessageInput({ onSend, disabled = false }: MessageInputP
   };
 
   return (
-    <div className="border-t border-light-border dark:border-dark-border bg-light-surface dark:bg-dark-surface p-4">
+    <div className="border-t border-light-border dark:border-dark-border bg-light-surface dark:bg-dark-surface p-3 xs:p-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))] xs:pb-[calc(1rem+env(safe-area-inset-bottom))]">
       <style jsx>{`
         textarea.chat-input::-webkit-scrollbar {
           width: 14px;
@@ -62,15 +62,15 @@ export default function MessageInput({ onSend, disabled = false }: MessageInputP
           background-clip: padding-box;
         }
       `}</style>
-      <div className="max-w-4xl mx-auto flex gap-3 items-end">
+      <div className="max-w-4xl mx-auto flex gap-2 xs:gap-3 items-end">
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Ask Whiskey anything... (or just say hi! 🐕)"
+          placeholder="Ask Whiskey anything... 🐕"
           disabled={disabled}
           rows={1}
-          className="chat-input flex-1 resize-none rounded-xl px-4 py-3 bg-light-background dark:bg-dark-background border border-light-border dark:border-dark-border text-light-text dark:text-dark-text placeholder:text-light-text-secondary dark:placeholder:text-dark-text-secondary focus:outline-none focus:ring-2 focus:ring-pug-fawn dark:focus:ring-pug-fawn-light disabled:opacity-50 disabled:cursor-not-allowed max-h-30 overflow-y-auto"
+          className="chat-input flex-1 resize-none rounded-xl px-3 xs:px-4 py-3 bg-light-background dark:bg-dark-background border border-light-border dark:border-dark-border text-light-text dark:text-dark-text placeholder:text-light-text-secondary dark:placeholder:text-dark-text-secondary focus:outline-none focus:ring-2 focus:ring-pug-fawn dark:focus:ring-pug-fawn-light disabled:opacity-50 disabled:cursor-not-allowed max-h-30 overflow-y-auto text-base"
           style={{
             minHeight: '48px',
             height: 'auto',
@@ -95,14 +95,15 @@ export default function MessageInput({ onSend, disabled = false }: MessageInputP
           whileTap={{ scale: 0.95 }}
           onClick={handleSend}
           disabled={disabled || !input.trim()}
-          className="shrink-0 w-12 h-12 rounded-xl bg-pug-fawn dark:bg-pug-fawn-light text-white flex items-center justify-center hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
+          className="shrink-0 w-12 h-12 min-w-[48px] min-h-[48px] rounded-xl bg-pug-fawn dark:bg-pug-fawn-light text-white flex items-center justify-center hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
+          aria-label="Send message"
         >
           <Send size={20} />
         </motion.button>
       </div>
 
       {/* Hint text */}
-      <div className="max-w-4xl mx-auto mt-2 text-xs text-light-text-secondary dark:text-dark-text-secondary px-1">
+      <div className="hidden xs:block max-w-4xl mx-auto mt-2 text-xs text-light-text-secondary dark:text-dark-text-secondary px-1">
         Press Enter to send, Shift+Enter for new line
       </div>
     </div>
