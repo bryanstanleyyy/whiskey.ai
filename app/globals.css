@@ -84,6 +84,11 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+
+  .h-screen-safe {
+    height: 100vh; /* Fallback for older browsers */
+    height: 100dvh; /* Modern browsers - adapts to browser UI */
+  }
 }
 
 /* Celebration animation (for easter eggs) */

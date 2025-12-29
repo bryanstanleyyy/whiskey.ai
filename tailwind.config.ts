@@ -23,6 +23,10 @@ const config: Config = {
         'safe-left': 'env(safe-area-inset-left)',
         'safe-right': 'env(safe-area-inset-right)',
       },
+      height: {
+        'screen-dynamic': '100dvh',
+        'screen-small': '100svh',
+      },
       colors: {
         // Pug-themed colors
         pug: {
