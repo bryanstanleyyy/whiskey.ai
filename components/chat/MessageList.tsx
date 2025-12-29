@@ -14,14 +14,79 @@ interface MessageListProps {
 
 export default function MessageList({ messages, isTyping, onPromptClick }: MessageListProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping]);
 
+  // Check if scrollbar is needed
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const checkScrollable = () => {
+      if (container.scrollHeight > container.clientHeight) {
+        container.setAttribute('data-scrollable', 'true');
+      } else {
+        container.removeAttribute('data-scrollable');
+      }
+    };
+
+    checkScrollable();
+    const observer = new ResizeObserver(checkScrollable);
+    observer.observe(container);
+
+    return () => observer.disconnect();
+  }, [messages, isTyping]);
+
   return (
-    <div className="flex-1 overflow-y-auto bg-light-background dark:bg-dark-background" style={{ scrollbarGutter: 'stable' }}>
+    <>
+      <style jsx>{`
+        .message-list::-webkit-scrollbar {
+          width: 14px;
+        }
+        .message-list::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .message-list::-webkit-scrollbar-thumb {
+          background: transparent;
+        }
+        .message-list::-webkit-scrollbar-button {
+          display: none;
+        }
+        /* Only show scrollbar when content overflows - Pug themed colors */
+        .message-list[data-scrollable="true"]::-webkit-scrollbar-track {
+          background: #F5E6D3 !important; /* pug-cream */
+          border-radius: 7px;
+          margin: 2px;
+        }
+        :global(.dark) .message-list[data-scrollable="true"]::-webkit-scrollbar-track {
+          background: rgba(160, 137, 104, 0.15) !important; /* pug-brown-medium with opacity */
+        }
+        .message-list[data-scrollable="true"]::-webkit-scrollbar-thumb {
+          background: #A08968 !important; /* pug-brown-medium */
+          border-radius: 7px;
+          border: 2px solid transparent;
+          background-clip: padding-box;
+          transition: background 150ms ease;
+        }
+        :global(.dark) .message-list[data-scrollable="true"]::-webkit-scrollbar-thumb {
+          background: #D4A574 !important; /* pug-fawn-light */
+          border: 2px solid transparent;
+          background-clip: padding-box;
+        }
+        .message-list[data-scrollable="true"]::-webkit-scrollbar-thumb:hover {
+          background: #C77A4E !important; /* pug-fawn */
+          background-clip: padding-box;
+        }
+        :global(.dark) .message-list[data-scrollable="true"]::-webkit-scrollbar-thumb:hover {
+          background: #C77A4E !important; /* pug-fawn */
+          background-clip: padding-box;
+        }
+      `}</style>
+      <div ref={scrollContainerRef} className="message-list flex-1 overflow-y-auto bg-light-background dark:bg-dark-background" style={{ scrollbarGutter: 'stable' }}>
       <div className="max-w-4xl mx-auto pl-4 pr-6 py-6">
         {/* Welcome message when no messages */}
         {messages.length === 0 && (
@@ -64,6 +129,7 @@ export default function MessageList({ messages, isTyping, onPromptClick }: Messa
         <div ref={messagesEndRef} />
       </div>
     </div>
+    </>
   );
 }
 
