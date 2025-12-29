@@ -21,7 +21,7 @@ export function checkForEasterEgg(message: string): WhiskeyResponse | null {
   if (Math.random() < 0.05) {
     const randomFact = PUG_FACTS[Math.floor(Math.random() * PUG_FACTS.length)];
     return {
-      content: "Oh! Random thought! *excited*\n\n" + randomFact,
+      content: "Oh! Random thought! *excited*",
       mood: 'normal',
       pugFact: randomFact,
     };

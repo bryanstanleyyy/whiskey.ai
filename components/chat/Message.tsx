@@ -13,16 +13,6 @@ interface MessageProps {
 export default function Message({ message, isLatest = false }: MessageProps) {
   const isUser = message.role === 'user';
 
-  // Parse message content for formatting
-  const formatContent = (content: string) => {
-    return content.split('\n').map((line, index) => (
-      <span key={index}>
-        {line}
-        {index < content.split('\n').length - 1 && <br />}
-      </span>
-    ));
-  };
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -51,7 +41,7 @@ export default function Message({ message, isLatest = false }: MessageProps) {
           }`}
         >
           <div className="whitespace-pre-wrap break-words">
-            {formatContent(message.content)}
+            {message.content}
           </div>
 
           {/* Pug Fact (if present) */}
