@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, KeyboardEvent } from 'react';
+import { useState, useEffect, KeyboardEvent } from 'react';
 import { Send } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -11,6 +11,17 @@ interface MessageInputProps {
 
 export default function MessageInput({ onSend, disabled = false }: MessageInputProps) {
   const [input, setInput] = useState('');
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    // Detect if device supports touch (mobile/tablet)
+    const checkTouch = () => {
+      setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    };
+    checkTouch();
+  }, []);
 
   const handleSend = () => {
     if (input.trim() && !disabled) {
@@ -21,8 +32,12 @@ export default function MessageInput({ onSend, disabled = false }: MessageInputP
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSend();
+      // On touch devices (mobile), allow Enter to create new line
+      // On desktop, Enter sends the message
+      if (!isTouchDevice) {
+        e.preventDefault();
+        handleSend();
+      }
     }
   };
 
@@ -102,8 +117,12 @@ export default function MessageInput({ onSend, disabled = false }: MessageInputP
         </motion.button>
       </div>
 
-      {/* Hint text */}
-      <div className="hidden xs:block max-w-4xl mx-auto mt-2 text-xs text-light-text-secondary dark:text-dark-text-secondary px-1">
+      {/* Hint text - only shown on non-touch devices */}
+      <div
+        suppressHydrationWarning
+        className="hidden xs:block max-w-4xl mx-auto mt-2 text-xs text-light-text-secondary dark:text-dark-text-secondary px-1"
+        style={{ display: !mounted || isTouchDevice ? 'none' : undefined }}
+      >
         Press Enter to send, Shift+Enter for new line
       </div>
     </div>
