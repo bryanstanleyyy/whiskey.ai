@@ -46,7 +46,7 @@ export default function ChatHeader({ onMenuClick, onNewChat }: ChatHeaderProps) 
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={onNewChat}
-            className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-lg bg-pug-fawn dark:bg-pug-fawn-light text-white hover:opacity-90 transition-opacity"
+            className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-lg bg-pug-fawn dark:bg-pug-fawn-light text-white dark:text-pug-black hover:opacity-90 transition-opacity"
           >
             <Plus size={16} />
             <span className="text-sm font-medium">New Chat</span>
@@ -57,7 +57,7 @@ export default function ChatHeader({ onMenuClick, onNewChat }: ChatHeaderProps) 
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={onNewChat}
-            className="sm:hidden p-2 rounded-lg bg-pug-fawn dark:bg-pug-fawn-light text-white"
+            className="sm:hidden p-2 rounded-lg bg-pug-fawn dark:bg-pug-fawn-light text-white dark:text-pug-black"
             aria-label="New chat"
           >
             <Plus size={20} />
