@@ -76,19 +76,19 @@ export async function generateWhiskeyResponse(
 
     return {
       content: cleanedContent,
-      mood: mood as any,
+      mood: mood as 'normal' | 'excited' | 'confused' | 'sleeping' | 'alert' | 'zoomies' | 'thinking',
       pugFact: undefined,
-      isEasterEgg: false,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Groq API Error:', error);
 
     // Handle specific errors
-    if (error?.status === 429) {
+    const apiError = error as { status?: number; message?: string };
+    if (apiError?.status === 429) {
       throw new Error('Rate limit exceeded');
     }
 
-    if (error?.message?.includes('API key')) {
+    if (apiError?.message?.includes('API key')) {
       throw new Error('Invalid API key');
     }
 

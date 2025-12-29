@@ -26,8 +26,8 @@ export function StorageWarningBanner() {
           🐶 Your chats are saved in your browser only
         </p>
         <p className="text-light-text/70 dark:text-dark-text/70 text-xs mt-1">
-          Your conversations stay private on your device. They won't sync across browsers or devices.
-          If you clear your browser data, they'll be gone forever! *sad pug noises*
+          Your conversations stay private on your device. They won&apos;t sync across browsers or devices.
+          If you clear your browser data, they&apos;ll be gone forever! *sad pug noises*
         </p>
       </div>
       <button
