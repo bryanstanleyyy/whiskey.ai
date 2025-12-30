@@ -118,7 +118,7 @@ MIT License - feel free to fork and make your own pug AI!
 
 ## Credits
 
-Made with 🐶 by Bryan (and Whiskey the Pug)
+Made with ❤️ by Bryan (and Whiskey the Pug)
 
 Inspired by: ChatGPT, Claude, and one very adorable pug named Whiskey
 
