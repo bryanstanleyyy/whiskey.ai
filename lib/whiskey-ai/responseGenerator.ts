@@ -1,5 +1,5 @@
 import { ResponseContext, WhiskeyResponse } from '@/types/chat';
-import { checkForEasterEgg, checkSpecialCombinations } from './easterEggs';
+import { checkForEasterEgg, checkSpecialCombinations, getRandomFunFact } from './easterEggs';
 
 /**
  * AI-POWERED Response Generator
@@ -65,10 +65,14 @@ export async function generateResponse(context: ResponseContext): Promise<Whiske
 
     const data = await response.json();
 
+    // Check if we should add a random fun fact (5% chance)
+    // Only add if one wasn't already provided by the API
+    const randomFact = data.pugFact ? null : getRandomFunFact();
+
     return {
       content: data.content,
       mood: data.mood,
-      pugFact: data.pugFact,
+      pugFact: data.pugFact || randomFact || undefined,
     };
   } catch (error) {
     console.error('Failed to generate AI response:', error);
