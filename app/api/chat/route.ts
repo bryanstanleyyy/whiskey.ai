@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { generateWhiskeyResponse } from '@/lib/ai/groqClient';
 import { GeminiRequest } from '@/types/gemini';
 import { Message } from '@/types/chat';
+import { isCurrentEventsQuestion, searchCurrentEvents, buildSearchContext } from '@/lib/utils/searchHelper';
 
 export async function POST(request: NextRequest) {
   try {
@@ -25,15 +26,29 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Check if this is a current events question and search if needed
+    let searchResults: string | null = null;
+    if (isCurrentEventsQuestion(userMessage)) {
+      console.log('[Chat API] Detected current events question, searching...');
+      searchResults = await searchCurrentEvents(userMessage);
+    }
+
     // Format conversation history for Groq (OpenAI format)
     const geminiHistory = conversationHistory.slice(-10).map(msg => ({
       role: msg.role,
       content: msg.content,
     }));
 
+    // Build user message with search context if available
+    let enhancedMessage = userMessage;
+    if (searchResults) {
+      enhancedMessage = buildSearchContext(searchResults) + '\n\n' + userMessage;
+      console.log('[Chat API] Added search context to message');
+    }
+
     // Build request
     const geminiRequest: GeminiRequest = {
-      userMessage,
+      userMessage: enhancedMessage,
       conversationHistory: geminiHistory.map(msg => ({
         role: msg.role === 'user' ? 'user' : 'model',
         parts: [{ text: msg.content }],
