@@ -1,28 +1,64 @@
 import { tavily } from '@tavily/core';
+import Groq from 'groq-sdk';
 
-// Initialize Tavily client
+// Initialize clients
 const tvly = tavily({ apiKey: process.env.TAVILY_API_KEY || '' });
-
-// Keywords that indicate a current events question
-const CURRENT_EVENTS_KEYWORDS = [
-  'president', 'prime minister', 'leader', 'government',
-  'news', 'latest', 'current', 'today', 'recently',
-  'happened', 'happening', 'going on', 'what is',
-  'election', 'vote', 'political', 'congress',
-  'breaking', 'update', 'now', 'this year',
-  'who is', 'what happened', 'current events'
-];
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY || '' });
 
 /**
- * Detect if a question is likely about current events
+ * Use AI to intelligently detect if a question requires current/real-time information
+ * This is more accurate than keyword matching and adapts to any question type
  */
-export function isCurrentEventsQuestion(message: string): boolean {
-  const lowerMessage = message.toLowerCase();
+export async function isCurrentEventsQuestion(message: string): Promise<boolean> {
+  try {
+    // Use a fast, cheap model call to detect if search is needed
+    const response = await groq.chat.completions.create({
+      model: 'llama-3.3-70b-versatile',
+      messages: [
+        {
+          role: 'system',
+          content: `You are a classification system. Determine if a question requires real-time web search to answer accurately.
 
-  // Check for current events keywords
-  return CURRENT_EVENTS_KEYWORDS.some(keyword =>
-    lowerMessage.includes(keyword)
-  );
+Answer YES if the question is about:
+- Current events, news, or recent happenings
+- Current leaders, officials, or public figures (presidents, CEOs, etc.)
+- Recent sports results, awards, or competitions
+- Current prices, stocks, weather, or time-sensitive data
+- Recent technology releases or announcements
+- Any information that changes frequently or is time-sensitive
+
+Answer NO if the question is about:
+- General knowledge that doesn't change (history, science facts, definitions)
+- Personal opinions or creative requests
+- Programming or technical help
+- General conversation or greetings
+- Hypothetical or philosophical questions
+
+Respond with ONLY "YES" or "NO" - nothing else.`,
+        },
+        {
+          role: 'user',
+          content: message,
+        },
+      ],
+      temperature: 0.1, // Low temperature for consistent classification
+      max_tokens: 5, // We only need "YES" or "NO"
+    });
+
+    const answer = response.choices[0]?.message?.content?.trim().toUpperCase();
+    const needsSearch = answer === 'YES';
+
+    console.log(`[AI Detection] "${message}" → ${needsSearch ? 'SEARCH' : 'SKIP'}`);
+
+    return needsSearch;
+  } catch (error) {
+    console.error('[AI Detection] Error:', error);
+    // Fallback to simple keyword check if AI fails
+    const fallbackKeywords = ['president', 'news', 'latest', 'current', 'today'];
+    const needsSearch = fallbackKeywords.some(kw => message.toLowerCase().includes(kw));
+    console.log(`[AI Detection] Fallback → ${needsSearch ? 'SEARCH' : 'SKIP'}`);
+    return needsSearch;
+  }
 }
 
 /**

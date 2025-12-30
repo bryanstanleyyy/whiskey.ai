@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
 
     // Check if this is a current events question and search if needed
     let searchResults: string | null = null;
-    if (isCurrentEventsQuestion(userMessage)) {
+    if (await isCurrentEventsQuestion(userMessage)) {
       console.log('[Chat API] Detected current events question, searching...');
       searchResults = await searchCurrentEvents(userMessage);
     }
