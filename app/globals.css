@@ -24,8 +24,12 @@ body {
 body {
   @apply bg-light-background dark:bg-dark-background;
   @apply text-light-text dark:text-dark-text;
-  /* Prevent pull-to-refresh */
-  overscroll-behavior-y: contain;
+}
+
+/* Prevent pull-to-refresh only in PWA mode */
+body.pwa-mode {
+  overscroll-behavior-y: none;
+  touch-action: pan-x pan-y;
 }
 
 /* Better tap highlighting */
