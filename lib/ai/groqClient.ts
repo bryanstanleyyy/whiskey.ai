@@ -1,6 +1,7 @@
 import Groq from 'groq-sdk';
 import { WHISKEY_SYSTEM_PROMPT } from './whiskeyPrompt';
 import type { GeminiRequest, GeminiResponse } from '@/types/gemini';
+import { getCurrentDate } from '@/lib/whiskey-ai/moodSystem';
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY || '',
@@ -38,11 +39,15 @@ export async function generateWhiskeyResponse(
   }
 
   try {
+    // Add current date context to system prompt
+    const currentDate = getCurrentDate();
+    const systemPromptWithDate = `CURRENT DATE: ${currentDate}\n\n${WHISKEY_SYSTEM_PROMPT}`;
+
     // Convert Gemini format to OpenAI format (Groq uses OpenAI spec)
     const messages = [
       {
         role: 'system' as const,
-        content: WHISKEY_SYSTEM_PROMPT,
+        content: systemPromptWithDate,
       },
       ...request.conversationHistory.map(msg => ({
         role: msg.role === 'user' ? ('user' as const) : ('assistant' as const),

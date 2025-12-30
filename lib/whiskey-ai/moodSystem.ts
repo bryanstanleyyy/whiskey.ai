@@ -10,6 +10,17 @@ export function getTimeOfDay(): TimeOfDay {
   return 'night';
 }
 
+export function getCurrentDate(): string {
+  const now = new Date();
+  const options: Intl.DateTimeFormatOptions = {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  };
+  return now.toLocaleDateString('en-US', options);
+}
+
 export function getMoodPrefix(timeOfDay: TimeOfDay): string {
   const prefixes = MOOD_PREFIXES[timeOfDay];
   if (!prefixes || prefixes.length === 0) return '';
