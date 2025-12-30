@@ -54,7 +54,7 @@ export async function searchCurrentEvents(query: string): Promise<string | null>
     if (response.results && response.results.length > 0) {
       const summary = response.results
         .slice(0, 2)
-        .map((r: any) => r.content)
+        .map((r: { content: string }) => r.content)
         .join('\n\n');
 
       console.log('[Search] Compiled summary from results');
