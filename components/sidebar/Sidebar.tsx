@@ -2,7 +2,8 @@
 
 import { useConversations } from '@/hooks/useConversations';
 import { useChatStore } from '@/stores/chatStore';
-import { MessageSquare, Trash2 } from 'lucide-react';
+import { useInstallPrompt } from '@/hooks/useInstallPrompt';
+import { MessageSquare, Trash2, Download } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface SidebarProps {
@@ -14,6 +15,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const { conversations, selectConversation, deleteConversation } =
     useConversations();
   const { currentConversation } = useChatStore();
+  const { canInstall, triggerInstall } = useInstallPrompt();
 
   const handleSelectConversation = (id: string) => {
     selectConversation(id);
@@ -100,6 +102,37 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           )}
         </AnimatePresence>
       </div>
+
+      {/* Install App Button */}
+      {canInstall && (
+        <div className="border-t border-light-border dark:border-dark-border p-2">
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={async () => {
+              const installed = await triggerInstall();
+              if (installed) {
+                onClose();
+              }
+            }}
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg
+                       bg-pug-fawn/10 dark:bg-pug-fawn-light/10
+                       hover:bg-pug-fawn/20 dark:hover:bg-pug-fawn-light/20
+                       border border-pug-fawn/30 dark:border-pug-fawn-light/30
+                       transition-colors"
+          >
+            <Download size={18} className="text-pug-fawn dark:text-pug-fawn-light" />
+            <div className="flex-1 text-left">
+              <div className="text-sm font-medium text-light-text dark:text-dark-text">
+                Install App
+              </div>
+              <div className="text-xs text-light-text-secondary dark:text-dark-text-secondary">
+                Add to home screen
+              </div>
+            </div>
+          </motion.button>
+        </div>
+      )}
 
       {/* Footer */}
       <div className="p-3 xs:p-4 border-t border-light-border dark:border-dark-border">

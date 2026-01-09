@@ -3,47 +3,29 @@
 import { useState, useEffect } from 'react';
 import { Download, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-
-interface BeforeInstallPromptEvent extends Event {
-  prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
-}
+import { useInstallPrompt } from '@/hooks/useInstallPrompt';
 
 export function InstallPrompt() {
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const { canInstall, triggerInstall } = useInstallPrompt();
   const [showPrompt, setShowPrompt] = useState(false);
 
   useEffect(() => {
-    // Check if already installed or dismissed
-    const isInstalled = window.matchMedia('(display-mode: standalone)').matches;
+    // Check if dismissed
     const isDismissed = localStorage.getItem('whiskey_install_dismissed') === 'true';
 
-    if (isInstalled || isDismissed) return;
+    if (isDismissed || !canInstall) return;
 
-    const handler = (e: Event) => {
-      e.preventDefault();
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
-      // Show prompt after 30 seconds of usage
-      setTimeout(() => setShowPrompt(true), 30000);
-    };
+    // Show prompt after 30 seconds of usage
+    const timer = setTimeout(() => setShowPrompt(true), 30000);
 
-    window.addEventListener('beforeinstallprompt', handler);
-
-    return () => window.removeEventListener('beforeinstallprompt', handler);
-  }, []);
+    return () => clearTimeout(timer);
+  }, [canInstall]);
 
   const handleInstall = async () => {
-    if (!deferredPrompt) return;
-
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-
-    if (outcome === 'accepted') {
-      console.log('PWA installed');
+    const installed = await triggerInstall();
+    if (installed) {
+      setShowPrompt(false);
     }
-
-    setDeferredPrompt(null);
-    setShowPrompt(false);
   };
 
   const handleDismiss = () => {
@@ -53,7 +35,7 @@ export function InstallPrompt() {
 
   return (
     <AnimatePresence>
-      {showPrompt && deferredPrompt && (
+      {showPrompt && canInstall && (
         <motion.div
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
